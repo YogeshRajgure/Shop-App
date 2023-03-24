@@ -8,7 +8,7 @@ class ProductsOverviewScreen extends StatelessWidget {
 
   // final List<Product> loadedProducts = ;
 
-  ProductsOverviewScreen({super.key});
+  // ProductsOverviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
