@@ -6,7 +6,7 @@ import '../widgets/products_gid.dart';
 class ProductsOverviewScreen extends StatelessWidget {
   static const routeName = '/';
 
-  final List<Product> loadedProducts = ;
+  // final List<Product> loadedProducts = ;
 
   ProductsOverviewScreen({super.key});
 
@@ -20,4 +20,3 @@ class ProductsOverviewScreen extends StatelessWidget {
     );
   }
 }
-
