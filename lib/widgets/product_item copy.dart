@@ -6,7 +6,7 @@ import '../providers/product.dart';
 
 import '../screens/product_detail_screen.dart';
 
-class ProductItem extends StatelessWidget {
+class _ProductItemCopied extends StatelessWidget {
   // final String id;
   // final String title;
   // final String imageUrl;
@@ -16,21 +16,24 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
-    // alternate way fo doing this is shown in the copy file
+    final product = Provider.of<Product>(context,
+        listen: false); ///////////////////////////////////////////
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         footer: GridTileBar(
           backgroundColor: Colors.black87,
-          leading: IconButton(
-            icon: Icon(
-                product.isFavourite ? Icons.favorite : Icons.favorite_border),
-            onPressed: () {
-              product.toggleFavouriteStatus();
-            },
-            color: Theme.of(context).accentColor,
+          leading: Consumer<Product>(
+            //////////////////////////////////////////////////
+            builder: (context, product, child) => IconButton(
+              icon: Icon(
+                  product.isFavourite ? Icons.favorite : Icons.favorite_border),
+              onPressed: () {
+                product.toggleFavouriteStatus();
+              },
+              color: Theme.of(context).accentColor,
+            ),
           ),
           title: Text(
             product.title,
