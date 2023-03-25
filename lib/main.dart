@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_4_shop_app/providers/cart.dart';
 import 'package:flutter_project_4_shop_app/screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -14,8 +15,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) => Products(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => Products(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Cart(),
+        ),
+        // or you can do this for both above
+        // ChangeNotifierProvider.value(
+        //   value: Cart(),
+        // ),
+      ],
       child: MaterialApp(
         title: 'MyShop',
         theme: ThemeData(
