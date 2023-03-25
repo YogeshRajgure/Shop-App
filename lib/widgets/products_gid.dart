@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/product.dart';
+import '../providers/product.dart';
 import '../providers/products_provider.dart';
 import './product_item.dart';
 
@@ -9,6 +9,7 @@ class ProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
+    // here we do not set listen = false, because in the grid we want to update every time there is some change.
     final loadedProducts = productsData.items;
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
@@ -18,10 +19,13 @@ class ProductsGrid extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
-      itemBuilder: (ctx, i) => ProductItem(
-        id: loadedProducts[i].id,
-        title: loadedProducts[i].title,
-        imageUrl: loadedProducts[i].imageUrl,
+      itemBuilder: (ctx, i) => ChangeNotifierProvider(
+        create: (c) => loadedProducts[i],
+        child: ProductItem(
+            // loadedProducts[i].id,
+            // loadedProducts[i].title,
+            // loadedProducts[i].imageUrl,
+            ),
       ),
       itemCount: loadedProducts.length,
     );
