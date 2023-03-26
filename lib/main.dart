@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_4_shop_app/providers/cart.dart';
-import 'package:flutter_project_4_shop_app/screens/cart_screen.dart';
-import 'package:flutter_project_4_shop_app/screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 import './screens/products_overview_screen.dart';
 import './providers/products_provider.dart';
+import './providers/cart.dart';
+import './screens/cart_screen.dart';
+import './screens/product_detail_screen.dart';
+import './providers/orders.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Cart(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => Orders(),
+        )
         // or you can do this for both above
         // ChangeNotifierProvider.value(
         //   value: Cart(),

@@ -14,6 +14,7 @@ class ProductDetailsScreen extends StatelessWidget {
       listen: false,
       // setting this false so that this will only load the data when the widget is being built and not for every little change that happens to the data.
     ).finadById(productId);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedProduct.title),
