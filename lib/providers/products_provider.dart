@@ -57,14 +57,4 @@ class Products with ChangeNotifier {
     // _items.add(value);
     notifyListeners();
   }
-
-  // void showFavoritesOnly() {
-  //   _showFavoritesOnly = true;
-  //   notifyListeners();
-  // }
-
-  // void showAll() {
-  //   _showFavoritesOnly = false;
-  //   notifyListeners();
-  // }
 }
