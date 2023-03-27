@@ -29,13 +29,13 @@ class CartItemm extends StatelessWidget {
       },
       background: Container(
         color: Theme.of(context).errorColor,
-        child: Icon(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        child: const Icon(
           Icons.delete,
           color: Colors.white,
           size: 40,
         ),
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
       ),
       child: GestureDetector(
         onTap: () {
@@ -55,12 +55,13 @@ class CartItemm extends StatelessWidget {
               leading: CircleAvatar(
                 // minRadius: 15,
                 child: Padding(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     child: FittedBox(child: Text('\$ $price'))),
               ),
               title: Text(title),
               subtitle: Text('Total: \$${price * quantity}'),
               trailing: Text('x $quantity'),
+              // cart item
             ),
           ),
         ),
