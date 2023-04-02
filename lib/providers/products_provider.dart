@@ -84,7 +84,7 @@ class Products with ChangeNotifier {
   void showAlertDialog(BuildContext context, id) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Cancel"),
+      child: Text("Cancel it"),
       onPressed: () {
         Navigator.of(context).pop();
       },
