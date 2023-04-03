@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import './product.dart';
 
@@ -54,6 +55,7 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    final url = 'https://shopapp-cd604-default-rtdb.firebaseio.com/';
     final newProduct = Product(
       id: DateTime.now().toString(),
       title: product.title,
@@ -84,13 +86,13 @@ class Products with ChangeNotifier {
   void showAlertDialog(BuildContext context, id) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Cancel it"),
+      child: const Text("Cancel"),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: Text("Continue"),
+      child: const Text("Continue"),
       onPressed: () {
         deleteProduct(id);
         Navigator.of(context).pop();
