@@ -143,7 +143,7 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     final url = Uri.https(
       'shopapp-cd604-default-rtdb.firebaseio.com',
       '/products/$id.json',
@@ -152,22 +152,21 @@ class Products with ChangeNotifier {
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     Product? existingProduct = _items[existingProductIndex];
 
-    http.delete(url).then((res) {
-      // here, .del does not throw error even if we get one, so we need to add our custom error.
-      if (res.statusCode >= 400) {
-        throw HttpException('could not delete product.');
-      }
-      existingProduct = null;
-    }).catchError((error) {
-      _items.insert(existingProductIndex, existingProduct!);
-      notifyListeners();
-    });
-
     _items.removeAt(existingProductIndex);
     notifyListeners();
+
+    final response = await http.delete(url);
+    // here, .del does not throw error even if we get one, so we need to add our custom error.
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct!);
+      notifyListeners();
+      throw HttpException('could not delete product.');
+    }
+
+    existingProduct = null;
   }
 
-  void showAlertDialog(BuildContext context, id) {
+  Future<void> showAlertDialog(BuildContext context, id) async {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: const Text("Cancel"),
@@ -175,6 +174,7 @@ class Products with ChangeNotifier {
         Navigator.of(context).pop();
       },
     );
+
     Widget continueButton = TextButton(
       child: const Text("Continue"),
       onPressed: () {
@@ -184,7 +184,7 @@ class Products with ChangeNotifier {
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
+      title: Text("Confirm Delete?"),
       content: Text(
           "Would you like to continue learning how to use Flutter alerts ?"),
       actions: [
@@ -193,7 +193,7 @@ class Products with ChangeNotifier {
       ],
     );
     // show the dialog
-    showDialog(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return alert;

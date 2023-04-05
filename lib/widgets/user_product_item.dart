@@ -17,6 +17,7 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scafflodMessanger_stored = ScaffoldMessenger.of(context);
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
@@ -27,19 +28,29 @@ class UserProductItem extends StatelessWidget {
         child: Row(
           children: <Widget>[
             IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(
-                    EditProductScreen.routeName,
-                    arguments: id,
-                  );
-                },
-                color: Theme.of(context).primaryColor,
-                icon: const Icon(Icons.edit)),
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  EditProductScreen.routeName,
+                  arguments: id,
+                );
+              },
+              color: Theme.of(context).primaryColor,
+              icon: const Icon(Icons.edit),
+            ),
             IconButton(
-                onPressed: () {
-                  Provider.of<Products>(context, listen: false)
-                      .showAlertDialog(context, id);
-                  // .deleteProduct(id);
+                onPressed: () async {
+                  try {
+                    await Provider.of<Products>(context, listen: false)
+                        // .deleteProduct(id);
+                        .showAlertDialog(context, id);
+                  } catch (error) {
+                    print('caugrtr this error');
+                    scafflodMessanger_stored.showSnackBar(
+                      const SnackBar(
+                        content: Text('Deleting Failed!'),
+                      ),
+                    );
+                  }
                 },
                 color: Theme.of(context).errorColor,
                 icon: const Icon(Icons.delete)),
