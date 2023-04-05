@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -118,9 +119,23 @@ class Products with ChangeNotifier {
     // });
   }
 
-  void updateProduct(String id, Product newProduct) {
+  Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
+      var url = Uri.https(
+        'shopapp-cd604-default-rtdb.firebaseio.com',
+        '/products/$id.json',
+      );
+      await http.patch(
+        url,
+        body: json.encode({
+          'title': newProduct.title,
+          'description': newProduct.description,
+          'imageUrl': newProduct.imageUrl,
+          'price': newProduct.price
+        }),
+      );
+
       _items[prodIndex] = newProduct;
       notifyListeners();
     } else {
@@ -129,7 +144,26 @@ class Products with ChangeNotifier {
   }
 
   void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+    final url = Uri.https(
+      'shopapp-cd604-default-rtdb.firebaseio.com',
+      '/products/$id.json',
+    );
+    // create a copy of what we wre deleting
+    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+    Product? existingProduct = _items[existingProductIndex];
+
+    http.delete(url).then((res) {
+      // here, .del does not throw error even if we get one, so we need to add our custom error.
+      if (res.statusCode >= 400) {
+        throw HttpException('could not delete product.');
+      }
+      existingProduct = null;
+    }).catchError((error) {
+      _items.insert(existingProductIndex, existingProduct!);
+      notifyListeners();
+    });
+
+    _items.removeAt(existingProductIndex);
     notifyListeners();
   }
 
