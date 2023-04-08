@@ -25,19 +25,42 @@ class Orders with ChangeNotifier {
     return [..._oreders];
   }
 
+  Future<void> fetchAndSetOrders() async {
+    var url = Uri.https(
+      'shopapp-cd604-default-rtdb.firebaseio.com',
+      '/orders.json',
+    );
+    final response = await http.get(url);
+  }
+
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     var url = Uri.https(
       'shopapp-cd604-default-rtdb.firebaseio.com',
-      '/products.json',
+      '/orders.json',
     );
-    http.post(url, body: json.encode({}));
+    final timeStamp = DateTime.now();
+    final response = await http.post(
+      url,
+      body: json.encode({
+        'amount': total,
+        'dateTime': timeStamp.toIso8601String(),
+        'products': cartProducts
+            .map((cp) => {
+                  'id': cp.id,
+                  'title': cp.title,
+                  'quantity': cp.quantity,
+                  'price': cp.price,
+                })
+            .toList()
+      }),
+    );
     _oreders.insert(
       0,
       OrderItem(
-        id: DateTime.now().toString(),
+        id: json.decode(response.body)['name'],
         amount: total,
         products: cartProducts,
-        dateTime: DateTime.now(),
+        dateTime: timeStamp,
       ),
     ); // we can also use .add(), but it will add new item at last
     notifyListeners();
