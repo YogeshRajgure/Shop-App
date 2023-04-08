@@ -31,7 +31,7 @@ class Product with ChangeNotifier {
     notifyListeners();
     final url = Uri.https(
       'shopapp-cd604-default-rtdb.firebaseio.com',
-      '/products/$id',
+      '/products/$id.json',
     );
     try {
       final response = await http.patch(url,
