@@ -17,7 +17,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    Future.delayed(Duration.zero).then((_) {});
+    Future.delayed(Duration.zero).then((_) {
+      Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
+    });
     super.initState();
   }
 
