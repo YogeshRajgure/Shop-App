@@ -20,15 +20,20 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _oreders = [];
+  final String authToken;
+
+  Orders(this.authToken, this._oreders);
 
   List<OrderItem> get orders {
     return [..._oreders];
   }
 
   Future<void> fetchAndSetOrders() async {
+    final Map<String, String> _queryParam = <String, String>{'auth': authToken};
     var url = Uri.https(
       'shopapp-cd604-default-rtdb.firebaseio.com',
       '/orders.json',
+      _queryParam,
     );
     final response = await http.get(url);
     final List<OrderItem> loadedOrders = [];
@@ -56,9 +61,11 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
+    final Map<String, String> _queryParam = <String, String>{'auth': authToken};
     var url = Uri.https(
       'shopapp-cd604-default-rtdb.firebaseio.com',
       '/orders.json',
+      _queryParam,
     );
     final timeStamp = DateTime.now();
     final response = await http.post(

@@ -25,13 +25,15 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavouriteStatus() async {
+  Future<void> toggleFavouriteStatus(String authToken) async {
     final old_status = isFavourite;
     isFavourite = !isFavourite;
     notifyListeners();
+    final Map<String, String> _queryParam = <String, String>{'auth': authToken};
     final url = Uri.https(
       'shopapp-cd604-default-rtdb.firebaseio.com',
       '/products/$id.json',
+      _queryParam,
     );
     try {
       final response = await http.patch(url,
