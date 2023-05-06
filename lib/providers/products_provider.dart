@@ -9,9 +9,11 @@ import './product.dart';
 
 class Products with ChangeNotifier {
   final String authToken;
+  final String userId;
 
   Products(
     this.authToken,
+    this.userId,
     this._items,
   );
 
@@ -67,7 +69,7 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProduct() async {
     final Map<String, String> _queryParam = <String, String>{'auth': authToken};
-    final url = Uri.https(
+    var url = Uri.https(
       'shopapp-cd604-default-rtdb.firebaseio.com',
       '/products.json',
       _queryParam,
@@ -79,6 +81,16 @@ class Products with ChangeNotifier {
       if (extractedData == null) {
         return;
       }
+      final Map<String, String> _queryParam = <String, String>{
+        'auth': authToken
+      };
+      url = Uri.https(
+        'shopapp-cd604-default-rtdb.firebaseio.com',
+        '/userFavourites/$userId.json',
+        _queryParam,
+      );
+      final favouriteResponse = await http.get(url);
+      final favouriteData = json.decode(favouriteResponse.body);
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
@@ -87,7 +99,8 @@ class Products with ChangeNotifier {
           description: prodData['description'],
           price: prodData['price'],
           imageUrl: prodData['imageUrl'],
-          isFavourite: prodData['isFavourite'],
+          isFavourite:
+              favouriteData == null ? false : favouriteData[prodId] ?? false,
         ));
       });
       _items = loadedProducts;
@@ -113,7 +126,6 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          'isFavourite': product.isFavourite,
         }),
       );
       final newProduct = Product(

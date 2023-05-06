@@ -22,6 +22,10 @@ class Auth with ChangeNotifier {
     return null;
   }
 
+  String? get userId {
+    return _userId;
+  }
+
   var api_key = 'AIzaSyAcYJpoZCcX-wN5ll2kVmUQEjRFWpd2NU4';
 
   Future<void> _authenticate(
